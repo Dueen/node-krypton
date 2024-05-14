@@ -6,16 +6,18 @@
   "description": "",
   "keywords": [],
   "license": "MIT",
-  "main": "index.js",
+  "main": "dist/index.mjs",
   "scripts": {
     "test": "node --test",
     "start": "node dist/index.mjs -p 3636",
-    "build": "tsc"
+    "build": "tsc",
+    "dev": "node --import @swc-node/register/esm-register --watch index.mts -p 3636"
   },
   "dependencies": {
     "fastify": "4.27.0"
   },
   "devDependencies": {
+    "@swc-node/register": "1.9.1",
     "@types/node": "20.12.12",
     "typescript": "5.4.5"
   },
