@@ -1,5 +1,5 @@
 import Fastify from "fastify";
-import { parseArgs } from "node:util";
+import { parseArgs, styleText } from "node:util";
 
 import type { ParseArgsConfig } from "node:util";
 declare const process: typeof globalThis.process & {
@@ -29,4 +29,7 @@ app.get("/", () => {
 // @ts-expect-error(1309) - We can use `await` in the top-level of a module here because of `--experimental-detect-module`
 await app.listen({ port: PORT });
 
-console.log(`Server listening on port ${PORT}`);
+console.log(
+  // @ts-expect-error(2345) - `styleText` also accepts an array of strings
+  styleText(["green", "underline"], `Server listening on port ${PORT}`)
+);
