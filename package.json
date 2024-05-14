@@ -1,0 +1,23 @@
+{
+  "name": "fastify-krypton",
+  "version": "1.0.0",
+  "private": true,
+  "author": "",
+  "description": "",
+  "keywords": [],
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test",
+    "start": "node dist/index.mjs",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "fastify": "4.27.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.12.12",
+    "typescript": "5.4.5"
+  },
+  "packageManager": "npm@10.7.0+sha1.c87e0bbb7a53422670e423d0198120760f67c3b7"
+}
