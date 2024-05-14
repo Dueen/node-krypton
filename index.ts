@@ -26,6 +26,7 @@ app.get("/", () => {
   return { hello: "world" };
 });
 
+// @ts-expect-error(1309) - We can use `await` in the top-level of a module here because of `--experimental-detect-module`
 await app.listen({ port: PORT });
 
 console.log(`Server listening on port ${PORT}`);

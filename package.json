@@ -6,20 +6,20 @@
   "description": "",
   "keywords": [],
   "license": "MIT",
-  "main": "dist/index.mjs",
+  "main": "dist/index.js",
   "scripts": {
     "test": "node --test",
-    "start": "node dist/index.mjs -p 3636",
-    "build": "tsc",
-    "dev": "node --import @swc-node/register/esm-register --watch index.mts -p 3636"
+    "prestart": "swc -d dist index.ts",
+    "start": "node --experimental-detect-module dist/index.js -p 3636",
+    "dev": "node --experimental-detect-module --import @swc-node/register/esm-register --watch index.ts -p 3636"
   },
   "dependencies": {
     "fastify": "4.27.0"
   },
   "devDependencies": {
     "@swc-node/register": "1.9.1",
-    "@types/node": "20.12.12",
-    "typescript": "5.4.5"
+    "@swc/cli": "^0.3.12",
+    "@types/node": "20.12.12"
   },
   "packageManager": "npm@10.7.0+sha1.c87e0bbb7a53422670e423d0198120760f67c3b7"
 }
