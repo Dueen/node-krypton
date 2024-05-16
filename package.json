@@ -6,20 +6,11 @@
   "description": "",
   "keywords": [],
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "node --test",
-    "prestart": "npx swc -d dist index.ts",
-    "start": "node --experimental-detect-module dist/index.js -p 3636",
-    "dev": "npx swc -d dist index.ts -w & node --env-file=.env --experimental-detect-module --watch dist/index.js -p 3636"
-  },
-  "dependencies": {
-    "@swc/cli": "^0.3.12",
-    "fastify": "4.27.0"
-  },
-  "devDependencies": {
-    "@types/node": "20.12.12",
-    "chokidar": "3.6.0"
+    "start": "node --env-file=.env --experimental-detect-module dist/index.js -p 3636",
+    "dev": "node --watch --env-file=.env.development --experimental-detect-module index.js -p 3636"
   },
   "packageManager": "npm@10.7.0+sha1.c87e0bbb7a53422670e423d0198120760f67c3b7"
 }
