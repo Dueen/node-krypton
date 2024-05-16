@@ -9,8 +9,10 @@
   "main": "index.js",
   "scripts": {
     "test": "node --test",
-    "start": "node --env-file=.env --experimental-detect-module dist/index.js -p 3636",
-    "dev": "node --watch --env-file=.env.development --experimental-detect-module index.js -p 3636"
+    "start": "node --env-file=.env --experimental-detect-module dist/index.js",
+    "start:stream": "node --env-file=.env --experimental-detect-module dist/index.js --stream",
+    "dev": "node --watch --env-file=.env.development --experimental-detect-module index.js ",
+    "dev:stream": "node --watch --env-file=.env.development --experimental-detect-module index.js --stream"
   },
   "packageManager": "npm@10.7.0+sha1.c87e0bbb7a53422670e423d0198120760f67c3b7"
 }
