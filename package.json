@@ -1,10 +1,18 @@
 {
-  "name": "fastify-krypton",
+  "name": "node-krypton",
   "version": "1.0.0",
   "private": true,
-  "author": "",
-  "description": "",
-  "keywords": [],
+  "author": "Dueen Eduarda <winery.toffees0g@icloud.com> (https://dueeneduarda.com)",
+  "description": "A Node.js HTTP server that serves static HTML content or streams part of it based on command-line arguments using features from v22",
+  "keywords": [
+    "nodejs",
+    "node22",
+    "javascript",
+    "js",
+    "http",
+    "html-streaming",
+    "mit"
+  ],
   "license": "MIT",
   "main": "index.js",
   "scripts": {
@@ -13,6 +21,10 @@
     "start:stream": "node --env-file=.env --experimental-detect-module dist/index.js --stream",
     "dev": "node --watch --env-file=.env.development --experimental-detect-module index.js ",
     "dev:stream": "node --watch --env-file=.env.development --experimental-detect-module index.js --stream"
+  },
+  "engines": {
+    "node": "22.x",
+    "npm": "10.x"
   },
   "packageManager": "npm@10.7.0+sha1.c87e0bbb7a53422670e423d0198120760f67c3b7"
 }
