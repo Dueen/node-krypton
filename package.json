@@ -17,8 +17,8 @@
   "main": "index.js",
   "scripts": {
     "test": "node --test",
-    "start": "node --env-file=.env --experimental-detect-module dist/index.js",
-    "start:stream": "node --env-file=.env --experimental-detect-module dist/index.js --stream",
+    "start": "node --env-file=.env --experimental-detect-module index.js",
+    "start:stream": "node --env-file=.env --experimental-detect-module index.js --stream",
     "dev": "node --watch --env-file=.env.development --experimental-detect-module index.js ",
     "dev:stream": "node --watch --env-file=.env.development --experimental-detect-module index.js --stream"
   },
