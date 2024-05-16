@@ -5,6 +5,54 @@ import { join } from "node:path";
 import { setTimeout } from "node:timers/promises";
 import { parseArgs, styleText } from "node:util";
 
+class Logger {
+  #levels = {
+    fatal: 5,
+    error: 4,
+    warn: 3,
+    info: 2,
+    debug: 1,
+    trace: 0,
+  };
+  #logLevel = this.#levels.info;
+
+  constructor(level) {
+    this.#logLevel = this.#levels[level];
+  }
+
+  fatal(message) {
+    if (this.#levels.fatal > this.#logLevel) return;
+    console.log(styleText(["red", "bold"], message));
+  }
+
+  error(message) {
+    if (this.#levels.error > this.#logLevel) return;
+    console.log(styleText(["red"], message));
+  }
+
+  warn(message) {
+    if (this.#levels.warn > this.#logLevel) return;
+    console.log(styleText(["yellow"], message));
+  }
+
+  info(message) {
+    if (this.#levels.info > this.#logLevel) return;
+    console.log(styleText(["blue"], message));
+  }
+
+  debug(message) {
+    if (this.#levels.debug > this.#logLevel) return;
+    console.log(styleText(["gray"], message));
+  }
+
+  trace(message) {
+    if (this.#levels.trace > this.#logLevel) return;
+    console.log(styleText(["gray", "dim"], message));
+  }
+}
+
+const logger = new Logger(process.env.LOG_LEVEL ?? "info");
+
 const argsOptions = { stream: { type: "boolean", default: false } };
 
 const { values } = parseArgs({
@@ -13,10 +61,8 @@ const { values } = parseArgs({
   allowPositionals: true,
 });
 
-console.log(
-  styleText(["blue", "bold"], "Starting server with the following options")
-);
-console.log("\n- stream:", values.stream);
+logger.debug("Server initialized with the following options");
+logger.debug(`- stream: ${values.stream}\n`);
 
 const server = createServer();
 
@@ -30,9 +76,8 @@ const partialHtml = await readFile(partialPath);
 const favicon = await readFile(faviconPath);
 
 server.on("request", async (req, res) => {
-  console.log(
-    styleText(["gray"], `Request received for ${req.method} ${req.url}`)
-  );
+  logger.trace(`Request received for ${req.method} ${req.url}`);
+
   if (req.url === "/favicon.ico") return res.end(favicon);
 
   res.write(indexHtml);
@@ -51,10 +96,9 @@ server.on("request", async (req, res) => {
   return res.end();
 });
 
-const port = 3636;
+const port = Number(process.env.PORT ?? 3636);
 
 server.listen({ port });
 
-console.log(
-  styleText(["green", "underline"], `\nServer listening on port ${port}\n`)
-);
+logger.info(`Server running at http://localhost:${port}`);
+logger.info("Press Ctrl+C to stop the server\n");
