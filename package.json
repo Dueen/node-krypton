@@ -9,17 +9,17 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "node --test",
-    "prestart": "swc -d dist index.ts",
+    "prestart": "npx swc -d dist index.ts",
     "start": "node --experimental-detect-module dist/index.js -p 3636",
-    "dev": "node --experimental-detect-module --import @swc-node/register/esm-register --watch index.ts -p 3636"
+    "dev": "npx swc -d dist index.ts -w & node --env-file=.env --experimental-detect-module --watch dist/index.js -p 3636"
   },
   "dependencies": {
+    "@swc/cli": "^0.3.12",
     "fastify": "4.27.0"
   },
   "devDependencies": {
-    "@swc-node/register": "1.9.1",
-    "@swc/cli": "^0.3.12",
-    "@types/node": "20.12.12"
+    "@types/node": "20.12.12",
+    "chokidar": "3.6.0"
   },
   "packageManager": "npm@10.7.0+sha1.c87e0bbb7a53422670e423d0198120760f67c3b7"
 }
