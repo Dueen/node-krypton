@@ -20,25 +20,35 @@ console.log("\n- stream:", values.stream);
 
 const server = createServer();
 
-const indexFilePath = join(import.meta.dirname, "public", "index.html");
-const partialsPath = join(import.meta.dirname, "public", "partial.html");
+const publicPath = join(import.meta.dirname, "public");
+const indexFilePath = join(publicPath, "index.html");
+const partialPath = join(publicPath, "partial.html");
+const faviconPath = join(publicPath, "favicon.ico");
 
-server.on("request", async (_req, res) => {
-  const indexHtml = await readFile(indexFilePath);
+const indexHtml = await readFile(indexFilePath);
+const partialHtml = await readFile(partialPath);
+const favicon = await readFile(faviconPath);
+
+server.on("request", async (req, res) => {
+  console.log(
+    styleText(["gray"], `Request received for ${req.method} ${req.url}`)
+  );
+  if (req.url === "/favicon.ico") return res.end(favicon);
+
   res.write(indexHtml);
 
-  if (values.stream) {
-    const stream = createReadStream(partialsPath, { highWaterMark: 85 });
-
-    for await (const chunk of stream) {
-      await setTimeout(270);
-      res.write(chunk);
-    }
-  } else {
-    const partialHtml = await readFile(partialsPath);
-    res.write(partialHtml);
+  if (!values.stream) {
+    return res.write(partialHtml).setHeader("Content-Type", "text/html").end();
   }
-  return res.setHeader("Content-Type", "text/html").end();
+
+  const stream = createReadStream(partialPath, { highWaterMark: 85 });
+
+  for await (const chunk of stream) {
+    await setTimeout(270);
+    res.write(chunk);
+  }
+
+  return res.end();
 });
 
 const port = 3636;
@@ -46,5 +56,5 @@ const port = 3636;
 server.listen({ port });
 
 console.log(
-  styleText(["green", "underline"], `\nServer listening on port ${port}`)
+  styleText(["green", "underline"], `\nServer listening on port ${port}\n`)
 );
