@@ -1,9 +1,11 @@
+"use strict";
+
 import { createReadStream } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { join } from "node:path";
 import { setTimeout } from "node:timers/promises";
-import { parseArgs, styleText } from "node:util";
+import { debuglog, parseArgs, styleText } from "node:util";
 
 class Logger {
   #levels = {
@@ -14,44 +16,45 @@ class Logger {
     debug: 1,
     trace: 0,
   };
-  #logLevel = this.#levels.info;
+  #logLevel;
+  #log = debuglog("krypton");
 
   constructor(level) {
-    this.#logLevel = this.#levels[level];
+    this.#logLevel = this.#levels[level] ?? this.#levels.info;
   }
 
-  fatal(message) {
+  fatal(msg, ...args) {
     if (this.#levels.fatal > this.#logLevel) return;
-    console.log(styleText(["red", "bold"], message));
+    this.#log(styleText(["red", "bold"], msg), ...args);
   }
 
-  error(message) {
+  error(msg, ...args) {
     if (this.#levels.error > this.#logLevel) return;
-    console.log(styleText(["red"], message));
+    this.#log(styleText(["red"], msg), ...args);
   }
 
-  warn(message) {
+  warn(msg, ...args) {
     if (this.#levels.warn > this.#logLevel) return;
-    console.log(styleText(["yellow"], message));
+    this.#log(styleText(["yellow"], msg), ...args);
   }
 
-  info(message) {
+  info(msg, ...args) {
     if (this.#levels.info > this.#logLevel) return;
-    console.log(styleText(["blue"], message));
+    this.#log(styleText(["blue"], msg), ...args);
   }
 
-  debug(message) {
+  debug(msg, ...args) {
     if (this.#levels.debug > this.#logLevel) return;
-    console.log(styleText(["gray"], message));
+    this.#log(styleText(["gray"], msg), ...args);
   }
 
-  trace(message) {
+  trace(msg, ...args) {
     if (this.#levels.trace > this.#logLevel) return;
-    console.log(styleText(["gray", "dim"], message));
+    this.#log(styleText(["gray", "dim"], msg), ...args);
   }
 }
 
-const logger = new Logger(process.env.LOG_LEVEL ?? "info");
+const logger = new Logger(process.env.LOG_LEVEL);
 
 const argsOptions = { stream: { type: "boolean", default: false } };
 
@@ -80,11 +83,10 @@ server.on("request", async (req, res) => {
 
   if (req.url === "/favicon.ico") return res.end(favicon);
 
+  res.setHeader("Content-Type", "text/html");
   res.write(indexHtml);
 
-  if (!values.stream) {
-    return res.write(partialHtml).setHeader("Content-Type", "text/html").end();
-  }
+  if (!values.stream) return res.end(partialHtml);
 
   const stream = createReadStream(partialPath, { highWaterMark: 85 });
 
@@ -100,5 +102,5 @@ const port = Number(process.env.PORT ?? 3636);
 
 server.listen({ port });
 
-logger.info(`Server running at http://localhost:${port}`);
+logger.info(`Server running at http://127.0.0.1:${port}`);
 logger.info("Press Ctrl+C to stop the server\n");
